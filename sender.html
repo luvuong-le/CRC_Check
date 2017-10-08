@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+        <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+    <title>CRC Sender (Sender)</title>
+</head>
+<body>
+
+    <div id="errors">
+
+    </div>
+
+    <div id="container">
+        <hr />
+        <h2 class="title"> CRC Converter (Sender) </h2>
+        <hr />
+        <h2 class="title"> Sender <h2>
+        <form method="POST" id="crc_form">
+            <div id="sender_left">
+                <h2 class="form-text title">Enter bits to encode:</h2>
+                <input type="text" class="bits" id="sender_bits" value="11100101" />
+            </div>
+            <div id="sender_right">
+                <h2 class="form-text title">Enter the divisor: </h2>
+                <input type="text" class="divisor" id="sender_divisor" value="11011" />
+            </div>
+            <br />
+            <input type="submit" class="submit" id="sender_submit" value="Send Encoded Bits" />
+            <div id="sender_information">
+
+            </div>
+        </form>
+    </div>
+    <script src="sender.js"></script>
+</body>
+</html>
