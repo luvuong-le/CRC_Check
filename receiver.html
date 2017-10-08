@@ -16,20 +16,19 @@
 
     <div id="container">
         <hr />
-        <h2 class="title"> CRC Converter (Receiver) </h2>
+        <h2 class="title"> CRC Converter </h2>
         <hr />
         <h2 class="title"> Recevier <h2>
-        <form method="POST" id="crc_form">
-            <div id="information_from_sender">
+        <div id="information_from_sender">
 
-            </div>
-            <br />
-            <input type="submit" class="submit" id="receiver_submit" value="Send Encoded Bits" />
-            <div id="receiver_information">
+        </div>
+        <br />
+        <a class="submit" id="receiver_submit">Check for Error</a>
+        <a href="sender.html" class="back">Resend another message</a>
+        <div id="receiver_information">
 
-            </div>
-        </form>
+        </div>
     </div>
-    <script src="crc.js"></script>
+    <script src="receiver.js"></script>
 </body>
 </html>

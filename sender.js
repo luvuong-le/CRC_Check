@@ -1,4 +1,4 @@
-let crc = {
+let sender = {
     e: {
         /* Sender Elements */
         crc_form: document.getElementById("crc_form"),
@@ -6,11 +6,7 @@ let crc = {
         sender_divisor: document.getElementById("sender_divisor"),
         sender_submit: document.getElementById("sender_submit"),
         sender_information: document.getElementById("sender_information"),
-
-        /* Receiver Elements */
-        receiver_information: document.getElementById("receiver_information"),
-        receiver_submit: document.getElementById("receiver_submit"),
-        information_from_sender: document.getElementById("information_from_sender"),
+        sender_crc: document.getElementById("crc_send"),
 
         /* Error Elements*/
         error_cont: document.getElementById("errors")
@@ -20,11 +16,10 @@ let crc = {
     bits_array: [],
     temp_array: [],
     divisor_array: [],
-    divisor_length: 0
 };
 
 
-crc.evtCallbacks = {
+sender.evtCallbacks = {
     calculateSender: function(e)
     {
         e.preventDefault();
@@ -35,12 +30,8 @@ crc.evtCallbacks = {
         /* Setting the divsor array with the input values */
         this.divisor_array = this.e.sender_divisor.value.split("");
 
-        /* Setting the divisor length (Should never change) */
-        this.divisor_length = this.divisor_array.length;
-
         /* For the length of the CRC Code - 1, Add that many 0's to the encoded message */
-        let divisor_count = this.divisor_array.length - 1;
-        for (let i = 0; i < divisor_count; i++) {
+        for (let i = 0; i < this.divisor_array.length - 1; i++) {
             this.bits_array.push("0");
         }
 
@@ -118,17 +109,21 @@ crc.evtCallbacks = {
             }
             console.log("CRC: " + this.bits_array);
             let final_crc = document.createElement("h6");
-            final_crc.innerHTML = "Final CRC: " + this.bits_array.join("") + "<br/><br/>" + "Sending to Receiver...";
+            final_crc.innerHTML = "Final CRC: " + this.bits_array.join("") + "<br/><br/>" + "SENDING TO RECEIVER...";
             this.e.sender_information.appendChild(final_crc);
 
-            /* Clear the form once its done */
-            this.e.crc_form.reset();
+            this.e.sender_crc.value = this.bits_array.join("");
+
+            /* Send form after finishing the calculation */
+            setTimeout(function() {
+                sender.e.crc_form.submit();
+            }, 2500);
 
         }
     },
 };
 
-crc.hasOtherNumbers = function(array) {
+sender.hasOtherNumbers = function(array) {
     for (let i = 0; i < array.length; i++)
     {
         if (i != 0 || i != 1) {
@@ -139,13 +134,13 @@ crc.hasOtherNumbers = function(array) {
     }
 };
 
-crc.addListeners = function() {
+sender.addListeners = function() {
         this.e.sender_submit.addEventListener("click", this.evtCallbacks.calculateSender.bind(this));
 };
 
 
-crc.init = function() {
+sender.init = function() {
     this.addListeners();
 };
 
-crc.init();
+sender.init();
