@@ -23,16 +23,16 @@
         <!-- For the purposes of right now, will use a GET (Will change to POST later on) -->
         <form action="receiver.html" method="GET" id="crc_form">
             <div id="sender_left">
-                <h2 class="form-text title">Enter bits to encode:</h2>
+                <h2 class="form-text title">Enter Message To Send:</h2>
                 <input type="text" class="bits" id="sender_bits" name="sender_bits" required />
             </div>
             <div id="sender_right">
-                <h2 class="form-text title">Enter the divisor: </h2>
+                <h2 class="form-text title">Enter Divisor: </h2>
                 <input type="text" class="divisor" id="sender_divisor" name="sender_divisor" required />
             </div>
             <br />
-            <input type="submit" class="submit" id="sender_submit" value="Send Encoded Bits" />
-            <input type="reset" class="submit" id="sender_submit" value="Reset Encoded Bits" />
+            <input type="submit" class="submit" id="sender_submit" value="Send Message" />
+            <input type="reset" class="submit" id="sender_submit" value="Reset Message" />
             <input type="hidden" name="final_crc" id="crc_send" value="" />
             <div id="sender_information">
 
