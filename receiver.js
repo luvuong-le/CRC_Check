@@ -59,7 +59,7 @@ receiver.evtCallbacks = {
 
         if (this.original_message != "" && this.original_divisor != "") {
 
-            while (this.bits_array.length - 1 >= this.divisor_array.length)
+            while (this.bits_array.length - 1 >= this.divisor_array.length - 1)
             {
                 for (let i = 0; i < this.divisor_array.length; i++)
                 {

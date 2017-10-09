@@ -52,7 +52,7 @@ sender.evtCallbacks = {
             starting_bits.innerHTML = "Message With Prepended 0's: " + this.bits_array.join("");
             this.e.sender_information.appendChild(starting_bits);
 
-            while (this.bits_array.length - 1 >= 4)
+            while (this.bits_array.length - 1 >= this.divisor_array.length - 1)
             {
                 for (let i = 0; i < this.divisor_array.length; i++)
                 {
