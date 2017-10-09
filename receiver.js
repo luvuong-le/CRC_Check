@@ -61,7 +61,30 @@ receiver.evtCallbacks = {
                 {
                     if (this.bits_array[i] == this.divisor_array[i])
                     {
-                        continue;
+                        if (i == this.divisor_array.length - 1) {
+                            for (let current_index = i; current_index < this.divisor_array.length; current_index++)
+                            {
+                                this.temp_array.push(this.bits_array[current_index] ^ this.divisor_array[current_index]);
+                            }
+
+                            for (let current_index = this.divisor_array.length; current_index < this.bits_array.length; current_index++)
+                            {
+                                this.temp_array.push(this.bits_array[current_index]);
+                            }
+
+                            console.log(this.temp_array);
+
+                            /* Empty the bits array then update it with new values closer to the CRC */
+                            this.bits_array = [];
+                            this.bits_array = this.temp_array.slice(0);
+
+
+                            /* Empty the temp array for the next one */
+                            this.temp_array = [];
+                            break;
+                        } else {
+                            continue;
+                        }
                     }
 
                     if ( this.bits_array[i] != this.divisor_array[i])
@@ -117,11 +140,33 @@ receiver.evtCallbacks = {
                 }
             }
             console.log("CRC: " + this.bits_array);
-            let final_crc = document.createElement("h6");
-            final_crc.innerHTML = "Final CRC: " + this.bits_array.join("");
-            this.e.receiver_information.appendChild(final_crc);
+
+            if (this.isError) {
+                let final_crc = document.createElement("h6");
+                final_crc.innerHTML = "Final CRC: 0" + "<br/><br/>" + "No Error Detected";
+                this.e.receiver_information.appendChild(final_crc);
+            } else {
+                let error = document.createElement("h6");
+                error.innerHTML = "Error Detected!";
+                this.e.receiver_information.appendChild(error);
+            }
         }
     }
+};
+
+receiver.isError = function() {
+    let errorFlag = 0;
+    for (let i = 0; i < this.bits_array.length; i++)
+    {
+        if (this.bits_array[i] !== "0" || this.bits_array !== 0) {
+            errorFlag++;
+            break;
+        }
+        else {
+            continue;
+        }
+    }
+    if (errorFlag > 0) { return true; } else { return false; }
 };
 
 receiver.addListeners = function() {
