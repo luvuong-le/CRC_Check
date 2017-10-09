@@ -9,7 +9,7 @@ let sender = {
         sender_crc: document.getElementById("crc_send"),
 
         /* Error Elements*/
-        error_cont: document.getElementById("errors")
+        error_cont: document.getElementById("fields-empty")
     },
 
     final_crc: null,
@@ -22,6 +22,7 @@ let sender = {
 sender.evtCallbacks = {
     calculateSender: function(e)
     {
+        /* Prevent the form from sending */
         e.preventDefault();
 
         /* Setting the bits array with the input values */
@@ -40,13 +41,16 @@ sender.evtCallbacks = {
         console.log("Sender Divisor: " + this.e.sender_divisor.value);
         console.log("Bit Array with added 0's: " + this.bits_array);
 
-        let starting_bits = document.createElement("h6");
-        starting_bits.innerHTML = "Message With Prepended 0's: " + this.bits_array.join("");
-        this.e.sender_information.appendChild(starting_bits);
-
 
         /* If both fields actually have input */
-        if (this.e.sender_bits.value != "" && this.e.sender_divisor != "") {
+        if (this.e.sender_bits.value != "" && this.e.sender_divisor.value != "" && !this.hasOtherNumbers(this.bits_array) && !this.hasOtherNumbers(this.divisor_array)) {
+
+            /* Prevent the button from being clicked again */
+            this.e.sender_submit.style.pointerEvents = "none";
+
+            let starting_bits = document.createElement("h6");
+            starting_bits.innerHTML = "Message With Prepended 0's: " + this.bits_array.join("");
+            this.e.sender_information.appendChild(starting_bits);
 
             while (this.bits_array.length - 1 >= 4)
             {
@@ -119,19 +123,40 @@ sender.evtCallbacks = {
                 sender.e.crc_form.submit();
             }, 2500);
 
+        } else {
+            console.log("Error Occured");
+            /* Generate Error Message Here */
+            /* Scroll to Top */
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+
+            if (sender.e.error_cont.style.display == "")
+            {
+                sender.e.error_cont.style.display = "block";
+            }
+
+            setTimeout(function() {
+                if (sender.e.error_cont.style.display == "block")
+                {
+                    sender.e.error_cont.style.display = "";
+                }
+            }, 3000);
         }
     },
 };
 
 sender.hasOtherNumbers = function(array) {
+    let error = 0;
     for (let i = 0; i < array.length; i++)
     {
-        if (i != 0 || i != 1) {
-            return true;
+        if (array[i] != "0" && array[i] != "1" || array[i] != 0 && array[i] != 1) {
+            error++;
+            break;
         } else {
-            return false;
+            continue;
         }
     }
+    if (error > 0) { return true; } else { return false; }
 };
 
 sender.addListeners = function() {

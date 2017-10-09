@@ -10,8 +10,8 @@
 </head>
 <body>
 
-    <div id="errors">
-
+    <div id="fields-empty" class="form">
+        Please fill in all the fields and ensure there are only 1's and 0's
     </div>
 
     <div id="container">
@@ -19,15 +19,16 @@
         <h2 class="title"> CRC Converter </h2>
         <hr />
         <h2 class="title"> Sender <h2>
+
         <!-- For the purposes of right now, will use a GET (Will change to POST later on) -->
         <form action="receiver.html" method="GET" id="crc_form">
             <div id="sender_left">
                 <h2 class="form-text title">Enter bits to encode:</h2>
-                <input type="text" class="bits" id="sender_bits" name="sender_bits" value="11100101" />
+                <input type="text" class="bits" id="sender_bits" name="sender_bits" required />
             </div>
             <div id="sender_right">
                 <h2 class="form-text title">Enter the divisor: </h2>
-                <input type="text" class="divisor" id="sender_divisor" name="sender_divisor" value="11011" />
+                <input type="text" class="divisor" id="sender_divisor" name="sender_divisor" required />
             </div>
             <br />
             <input type="submit" class="submit" id="sender_submit" value="Send Encoded Bits" />

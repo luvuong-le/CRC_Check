@@ -24,6 +24,9 @@ receiver.evtCallbacks = {
         this.original_message = this.getQueryParams("sender_bits");
         this.original_divisor = this.getQueryParams("sender_divisor");
 
+        /* Prevent the button from being clicked again */
+        this.e.receiver_submit.style.pointerEvents = "none";
+
         /* Set these to the corresponding arrays */
 
         /* Setting the bits array with the input values */
@@ -143,7 +146,7 @@ receiver.evtCallbacks = {
 
             if (this.isError) {
                 let final_crc = document.createElement("h6");
-                final_crc.innerHTML = "Final CRC: 0" + "<br/><br/>" + "No Error Detected";
+                final_crc.innerHTML = "Final CRC: 0" + "<br/><br/>" + "No Error Detected!";
                 this.e.receiver_information.appendChild(final_crc);
             } else {
                 let error = document.createElement("h6");
@@ -158,7 +161,7 @@ receiver.isError = function() {
     let errorFlag = 0;
     for (let i = 0; i < this.bits_array.length; i++)
     {
-        if (this.bits_array[i] !== "0" || this.bits_array !== 0) {
+        if (this.bits_array[i] !== "0" || this.bits_array[i] !== 0) {
             errorFlag++;
             break;
         }
