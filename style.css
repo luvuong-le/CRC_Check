@@ -9,7 +9,6 @@
 }
 
 #fields-empty {
-    display: none;
     margin-top: 50px;
     padding: 30px;
     background-color: #24313C;
@@ -25,6 +24,7 @@
     animation-duration: 1s;
     animation-fill-mode: forwards;
     transform-origin: top center;
+
 }
 
 @keyframes slideDown {

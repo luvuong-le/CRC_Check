@@ -37,10 +37,11 @@ receiver.evtCallbacks = {
 
         this.crc_array = this.crc_from_sender.split("");
 
-        /* The Appended message will have the crc, but if the CRC is only 3 characters append one to the beginning */
-        if (this.crc_array.length <= 3) {
-            this.crc_array.unshift("0");
-        }
+        // /* The Appended message will have the crc, but if the CRC is only 3 characters append one to the beginning */
+        // if (this.crc_array.length <= 3) {
+        //         this.crc_array.unshift("0");
+        //
+        // }
 
         /* Push the new crc to the bits array */
         for (let i = 0; i < this.crc_array.length; i++) {
@@ -58,7 +59,7 @@ receiver.evtCallbacks = {
 
         if (this.original_message != "" && this.original_divisor != "") {
 
-            while (this.bits_array.length - 1 >= 4)
+            while (this.bits_array.length - 1 >= this.divisor_array.length)
             {
                 for (let i = 0; i < this.divisor_array.length; i++)
                 {
@@ -144,11 +145,15 @@ receiver.evtCallbacks = {
             }
             console.log("CRC: " + this.bits_array);
 
-            if (this.isError) {
+            if (!this.isError(this.bits_array)) {
                 let final_crc = document.createElement("h6");
                 final_crc.innerHTML = "Final CRC: 0" + "<br/><br/>" + "No Error Detected!";
                 this.e.receiver_information.appendChild(final_crc);
             } else {
+                let err_element = document.createElement("h6");
+                err_element.innerHTML = this.bits_array.join("");
+                this.e.receiver_information.appendChild(err_element);
+
                 let error = document.createElement("h6");
                 error.innerHTML = "Error Detected!";
                 this.e.receiver_information.appendChild(error);
@@ -157,11 +162,11 @@ receiver.evtCallbacks = {
     }
 };
 
-receiver.isError = function() {
+receiver.isError = function(array) {
     let errorFlag = 0;
-    for (let i = 0; i < this.bits_array.length; i++)
+    for (let i = 0; i < array.length; i++)
     {
-        if (this.bits_array[i] !== "0" || this.bits_array[i] !== 0) {
+        if (array[i] != "0" || array[i] != 0) {
             errorFlag++;
             break;
         }

@@ -58,7 +58,30 @@ sender.evtCallbacks = {
                 {
                     if (this.bits_array[i] == this.divisor_array[i])
                     {
-                        continue;
+                        if (i == this.divisor_array.length - 1) {
+                            for (let current_index = i; current_index < this.divisor_array.length; current_index++)
+                            {
+                                this.temp_array.push(this.bits_array[current_index] ^ this.divisor_array[current_index]);
+                            }
+
+                            for (let current_index = this.divisor_array.length; current_index < this.bits_array.length; current_index++)
+                            {
+                                this.temp_array.push(this.bits_array[current_index]);
+                            }
+
+                            console.log(this.temp_array);
+
+                            /* Empty the bits array then update it with new values closer to the CRC */
+                            this.bits_array = [];
+                            this.bits_array = this.temp_array.slice(0);
+
+
+                            /* Empty the temp array for the next one */
+                            this.temp_array = [];
+                            break;
+                        } else {
+                            continue;
+                        }
                     }
 
                     if ( this.bits_array[i] != this.divisor_array[i])
@@ -132,14 +155,17 @@ sender.evtCallbacks = {
 
             if (sender.e.error_cont.style.display == "")
             {
-                sender.e.error_cont.style.display = "block";
+                sender.e.error_cont.classList.add("visible");
             }
 
             setTimeout(function() {
-                if (sender.e.error_cont.style.display == "block")
+                if (sender.e.error_cont.classList.contains("visible"))
                 {
-                    sender.e.error_cont.style.display = "";
+                    sender.e.error_cont.classList.remove("visible");
+                    sender.e.error_cont.classList.add("hidden");
                 }
+
+                sender.e.crc_form.reset();
             }, 3000);
         }
     },
@@ -166,6 +192,7 @@ sender.addListeners = function() {
 
 sender.init = function() {
     this.addListeners();
+    this.e.error_cont.classList.add("hidden");
 };
 
 sender.init();
