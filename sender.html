@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="style.css" />
-        <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
-    <title>CRC Sender (Sender)</title>
+    <link rel="stylesheet" href="css/flexboxgrid.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+    <title>CRC | Sender</title>
 </head>
 <body>
 
@@ -15,30 +16,36 @@
     </div>
 
     <div id="container">
-        <hr />
-        <h2 class="title"> Cyclic Redundancy Checker  </h2>
-        <hr />
-        <h2 class="title"> Sender <h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="title"> Sender <h2>
+            </div>
+        </div>
 
-        <!-- For the purposes of right now, will use a GET (Will change to POST later on) -->
-        <form action="receiver.html" method="GET" id="crc_form">
-            <div id="sender_left">
-                <h2 class="form-text title">Enter Message To Send:</h2>
-                <input type="text" class="bits" id="sender_bits" name="sender_bits" required />
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form">
+                    <form action="receiver.html" method="GET" id="crc_form">
+                            <h4>Sender Inputs</h4><hr>
+                            
+                            <input type="text" class="bits" id="sender_bits" name="sender_bits" required />
+                            <input type="text" class="divisor" id="sender_divisor" name="sender_divisor" required />
+                        
+                            <input type="submit" class="submit" id="sender_submit" value="Send Message" />
+                            <input type="reset" class="submit" id="sender_submit" value="Reset Message" />
+                            
+                            <input type="hidden" name="final_crc" id="crc_send" value="" />
+        
+                        </form>
+                </div>
             </div>
-            <div id="sender_right">
-                <h2 class="form-text title">Enter Divisor: </h2>
-                <input type="text" class="divisor" id="sender_divisor" name="sender_divisor" required />
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div id="sender_information">
+                    <h4>Sender Status</h4><hr>
+                </div>
             </div>
-            <br />
-            <input type="submit" class="submit" id="sender_submit" value="Send Message" />
-            <input type="reset" class="submit" id="sender_submit" value="Reset Message" />
-            <input type="hidden" name="final_crc" id="crc_send" value="" />
-            <div id="sender_information">
-
-            </div>
-        </form>
+        </div>
     </div>
-    <script src="sender.js"></script>
+    <script src="js/sender.js"></script>
 </body>
 </html>

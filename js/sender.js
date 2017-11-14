@@ -1,63 +1,56 @@
-let receiver = {
+let sender = {
     e: {
-        /* Receiver Elements */
-        receiver_information: document.getElementById("receiver_information"),
-        receiver_submit: document.getElementById("receiver_submit"),
-        information_from_sender: document.getElementById("information_from_sender")
+        /* Sender Elements */
+        crc_form: document.getElementById("crc_form"),
+        sender_bits: document.getElementById("sender_bits"),
+        sender_divisor: document.getElementById("sender_divisor"),
+        sender_submit: document.getElementById("sender_submit"),
+        sender_information: document.getElementById("sender_information"),
+        sender_crc: document.getElementById("crc_send"),
+
+        /* Error Elements*/
+        error_cont: document.getElementById("fields-empty")
     },
 
-    crc_from_sender: null,
-    original_message: null,
-    original_divisor: null,
     final_crc: null,
-    crc_array: [],
     bits_array: [],
     temp_array: [],
     divisor_array: [],
 };
 
-receiver.evtCallbacks = {
-    calculateReceiver: function()
+
+sender.evtCallbacks = {
+    calculateSender: function(e)
     {
-        /* Append the CRC from sender onto the original message */
-        this.crc_from_sender = this.getQueryParams("final_crc");
-        this.original_message = this.getQueryParams("sender_bits");
-        this.original_divisor = this.getQueryParams("sender_divisor");
-
-        /* Prevent the button from being clicked again */
-        this.e.receiver_submit.style.pointerEvents = "none";
-
-        /* Set these to the corresponding arrays */
+        /* Prevent the form from sending */
+        e.preventDefault();
 
         /* Setting the bits array with the input values */
-        this.bits_array = this.original_message.split("");
+        this.bits_array = this.e.sender_bits.value.split("");
 
         /* Setting the divsor array with the input values */
-        this.divisor_array = this.original_divisor.split("");
+        this.divisor_array = this.e.sender_divisor.value.split("");
 
-        this.crc_array = this.crc_from_sender.split("");
-
-        // /* The Appended message will have the crc, but if the CRC is only 3 characters append one to the beginning */
-        // if (this.crc_array.length <= 3) {
-        //         this.crc_array.unshift("0");
-        //
-        // }
-
-        /* Push the new crc to the bits array */
-        for (let i = 0; i < this.crc_array.length; i++) {
-            this.bits_array.push(this.crc_array[i]);
+        /* For the length of the CRC Code - 1, Add that many 0's to the encoded message */
+        for (let i = 0; i < this.divisor_array.length - 1; i++) {
+            this.bits_array.push("0");
         }
 
         /* Console Log the starting information */
-        console.log("Receiver Bits: " + this.original_message);
-        console.log("Receiver Divisor: " + this.original_divisor);
+        console.log("Sender Bits: " + this.e.sender_bits.value);
+        console.log("Sender Divisor: " + this.e.sender_divisor.value);
         console.log("Bit Array with added 0's: " + this.bits_array);
 
-        let receiver_bits = document.createElement("h6");
-        receiver_bits.innerHTML = "Check Message With Prepended 0's: " + this.bits_array.join("");
-        this.e.receiver_information.appendChild(receiver_bits);
 
-        if (this.original_message != "" && this.original_divisor != "") {
+        /* If both fields actually have input */
+        if (this.e.sender_bits.value != "" && this.e.sender_divisor.value != "" && !this.hasOtherNumbers(this.bits_array) && !this.hasOtherNumbers(this.divisor_array)) {
+
+            /* Prevent the button from being clicked again */
+            this.e.sender_submit.style.pointerEvents = "none";
+
+            let starting_bits = document.createElement("h6");
+            starting_bits.innerHTML = "Message With Prepended 0's: " + this.bits_array.join("");
+            this.e.sender_information.appendChild(starting_bits);
 
             while (this.bits_array.length - 1 >= this.divisor_array.length - 1)
             {
@@ -104,7 +97,6 @@ receiver.evtCallbacks = {
 
                             console.log(this.temp_array);
 
-
                             /* Empty the bits array then update it with new values closer to the CRC */
                             this.bits_array = [];
                             this.bits_array = this.temp_array.slice(0);
@@ -128,7 +120,6 @@ receiver.evtCallbacks = {
                             }
 
                             console.log(this.temp_array);
-
                             /* Empty the bits array then update it with new values closer to the CRC */
                             this.bits_array = [];
                             this.bits_array = this.temp_array.slice(0);
@@ -144,70 +135,62 @@ receiver.evtCallbacks = {
                 }
             }
             console.log("CRC: " + this.bits_array);
+            let final_crc = document.createElement("h6");
+            final_crc.innerHTML = "Final CRC: " + this.bits_array.join("") + "<br/><br/>" + "SENDING TO RECEIVER...";
+            this.e.sender_information.appendChild(final_crc);
 
-            if (!this.isError(this.bits_array)) {
-                let final_crc = document.createElement("h6");
-                final_crc.innerHTML = "Final CRC: 0" + "<br/><br/>" + "No Error Detected!";
-                this.e.receiver_information.appendChild(final_crc);
-            } else {
-                let err_element = document.createElement("h6");
-                err_element.innerHTML = this.bits_array.join("");
-                this.e.receiver_information.appendChild(err_element);
+            this.e.sender_crc.value = this.bits_array.join("");
 
-                let error = document.createElement("h6");
-                error.innerHTML = "Error Detected!";
-                this.e.receiver_information.appendChild(error);
+            /* Send form after finishing the calculation */
+            setTimeout(function() {
+                sender.e.crc_form.submit();
+            }, 2500);
+
+        } else {
+            console.log("Error Occured");
+            /* Generate Error Message Here */
+            /* Scroll to Top */
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+
+            if (sender.e.error_cont.style.display == "")
+            {
+                sender.e.error_cont.classList.add("visible");
             }
+
+            setTimeout(function() {
+                if (sender.e.error_cont.classList.contains("visible"))
+                {
+                    sender.e.error_cont.classList.remove("visible");
+                    sender.e.error_cont.classList.add("hidden");
+                }
+            }, 3000);
         }
-    }
+    },
 };
 
-receiver.isError = function(array) {
-    let errorFlag = 0;
+sender.hasOtherNumbers = function(array) {
+    let error = 0;
     for (let i = 0; i < array.length; i++)
     {
-        if (array[i] != "0" || array[i] != 0) {
-            errorFlag++;
+        if (array[i] != "0" && array[i] != "1" || array[i] != 0 && array[i] != 1) {
+            error++;
             break;
-        }
-        else {
+        } else {
             continue;
         }
     }
-    if (errorFlag > 0) { return true; } else { return false; }
+    if (error > 0) { return true; } else { return false; }
 };
 
-receiver.addListeners = function() {
-    window.addEventListener("load", () => {
-        /* Append all the information from the sender */
-        let message_sent = document.createElement("h6");
-        message_sent.innerHTML = "Message Sent from Sender: " + receiver.getQueryParams("sender_bits");
-        this.e.information_from_sender.appendChild(message_sent);
-
-        let divisor_sent = document.createElement("h6");
-        divisor_sent.innerHTML = "Divisor Sent: " + receiver.getQueryParams("sender_divisor");
-        this.e.information_from_sender.appendChild(divisor_sent);
-
-        let final_crc_sent = document.createElement("h6");
-        final_crc_sent.innerHTML = "Final Check Sent: " + receiver.getQueryParams("final_crc");
-        this.e.information_from_sender.appendChild(final_crc_sent);
-    });
-
-    this.e.receiver_submit.addEventListener("click", this.evtCallbacks.calculateReceiver.bind(this));
+sender.addListeners = function() {
+        this.e.sender_submit.addEventListener("click", this.evtCallbacks.calculateSender.bind(this));
 };
 
-receiver.getQueryParams = function(paramName) {
-    let query = window.location.search.substring(1);
-    let params = query.split("&");
-    for (let i = 0; i < params.length; i++)
-    {
-        let parameter = params[i].split("=");
-        if (parameter[0] == paramName) { return parameter[1]; }
-    }
-};
 
-receiver.init = function() {
+sender.init = function() {
     this.addListeners();
+    this.e.error_cont.classList.add("hidden");
 };
 
-receiver.init();
+sender.init();

@@ -2,33 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="style.css" />
-        <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
-    <title>CRC receiver (Receiver)</title>
+    <link rel="stylesheet" href="css/flexboxgrid.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+    <title>CRC | Receiver</title>
 </head>
 <body>
-
-    <div id="errors">
-
-    </div>
-
     <div id="container">
-        <hr />
-        <h2 class="title"> Cyclic Redundancy Checker </h2>
-        <hr />
-        <h2 class="title"> Receiver <h2>
-        <div id="information_from_sender">
-
+        <div class="row">
+            <div class="col-xs-12">
+                <h2> Receiver <h2>
+            </div>
         </div>
-        <br />
-        <a class="submit" id="receiver_submit">Check for Error</a>
-        <a href="sender.html" class="back">Resend another message</a>
-        <div id="receiver_information">
 
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div id="receiver_information">
+                    <h4>Receiver Options</h4><hr>
+
+                    <input type="submit" class="submit" id="receiver_submit" value="Check For Error" />
+                    <input type="submit" class="submit" id="receiver_back" value="Resend Another Message" />
+                
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">                        
+                <div id="information_from_sender">
+                    <h4>Receiver Status</h4><hr>
+                </div>
+            </div>
         </div>
     </div>
-    <script src="receiver.js"></script>
+    
+    <script src="js/receiver.js"></script>
 </body>
 </html>
